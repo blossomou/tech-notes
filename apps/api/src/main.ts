@@ -1,16 +1,28 @@
 import * as express from 'express';
-import { Message } from '@tech-notes/api-interfaces';
+import * as path from 'path';
+
+import routes from './routes/root';
+
+const port = process.env.port || 3333;
 
 const app = express();
 
-const greeting: Message = { message: 'Welcome to api!' };
+app.use(express.json());
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', routes);
 
-app.get('/api', (req, res) => {
-  res.send(greeting);
+app.all('*', (req, res) => {
+  res.status(404);
+  if (req.accepts('html')) {
+    res.sendFile(path.join(__dirname, 'views', '404.html'));
+  } else if (req.accepts('json')) {
+    res.json({ message: '404 Not Found' });
+  } else {
+    res.type('txt').send('404 Not Found');
+  }
 });
 
-const port = process.env.port || 3333;
 const server = app.listen(port, () => {
-  console.log('Listening at http://localhost:' + port + '/api');
+  console.log(`Server running on port ${port}`);
 });
 server.on('error', console.error);
