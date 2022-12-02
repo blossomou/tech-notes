@@ -1,16 +1,22 @@
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
+import * as dotenv from 'dotenv';
 import * as express from 'express';
+import mongoose from 'mongoose';
 import * as path from 'path';
 
 import { corsOptions } from './config/cors-options';
+import { connectDB } from './database/db';
 import { errorHandler } from './middleware/error-handler';
-import { logger } from './middleware/logger';
+import { logEvents, logger } from './middleware/logger';
 import routes from './routes/root';
 
+dotenv.config();
 const app = express();
 const port = process.env.port || 3500;
 
+console.log(process.env.NODE_ENV);
+connectDB();
 app.use(logger);
 app.use(cors(corsOptions));
 
@@ -32,7 +38,17 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler);
 
-const server = app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+mongoose.connection.once('open', () => {
+  console.log('MongoDB connected');
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
 });
-server.on('error', console.error);
+
+mongoose.connection.on('error', (err) => {
+  console.log(err);
+  logEvents(
+    `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
+    'mongoErrLog.log'
+  );
+});
