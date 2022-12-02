@@ -13,6 +13,7 @@ export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await UserModel.find().select('-password').lean();
   if (!users?.length) {
     res.status(400).json({ message: 'No users found' });
+    return;
   }
   res.status(200).json(users);
 });
@@ -27,6 +28,7 @@ export const createNewUser = asyncHandler(
     //Confirm data
     if (!username || !password || !Array.isArray(roles) || !roles.length) {
       res.status(400).json({ message: 'All fields are required' });
+      return;
     }
 
     //Check for duplicate
@@ -34,9 +36,10 @@ export const createNewUser = asyncHandler(
 
     if (duplicate) {
       res.status(409).json({ message: 'Duplicate username' });
+      return;
     }
-    //Hash password
 
+    //Hash password
     const hashedPassword = await bcrypt.hash(password, 10); //salt rounds
 
     const userObject = { username, password: hashedPassword, roles };
@@ -44,12 +47,12 @@ export const createNewUser = asyncHandler(
     //Create and store new user
     const user: UserType = await UserModel.create(userObject);
 
-    if (user) {
-      //created
-      res.status(201).json({ message: `New user ${username} created` });
-    } else {
+    if (!user) {
       res.status(400).json({ message: 'Invalid user data received' });
+      return;
     }
+
+    res.status(201).json({ message: `New user ${username} created` });
   }
 );
 
@@ -57,31 +60,34 @@ export const createNewUser = asyncHandler(
 //@route PATCH /users
 //@access Private
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
-  const { id, username, roles, isActive, password } = req.body;
+  const { _id, username, roles, isActive, password } = req.body;
 
   //Confirm data
   if (
-    !id ||
+    !_id ||
     !username ||
     !Array.isArray(roles) ||
     !roles.length ||
     typeof isActive !== 'boolean'
   ) {
     res.status(400).json({ message: 'All fields are required' });
+    return;
   }
 
-  const user = await UserModel.findById(id).exec();
+  const user = await UserModel.findById(_id).exec();
 
   if (!user) {
     res.status(400).json({ message: 'User not found' });
+    return;
   }
 
   //Check for duplicate
   const duplicate = await UserModel.findOne({ username }).lean().exec();
   //Allow updates to the original User
 
-  if (duplicate && duplicate?._id.toString() !== id) {
+  if (duplicate && duplicate?._id.toString() !== _id) {
     res.status(409).json({ message: 'Duplicate username' });
+    return;
   }
 
   user.username = username;
@@ -101,21 +107,24 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 //@route DELETE /users
 //@access Private
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { _id } = req.body;
 
-  if (!id) {
+  if (!_id) {
     res.status(400).json({ message: 'User ID Required' });
+    return;
   }
-  const notes = await NoteModel.findOne({ user: id }).lean().exec();
+  const note = await NoteModel.findOne({ user: _id }).lean().exec();
 
-  if (notes != null) {
+  if (note) {
     res.status(400).json({ message: 'User has assigned notes' });
+    return;
   }
 
-  const user = await UserModel.findById(id).exec();
+  const user = await UserModel.findById(_id).exec();
 
   if (!user) {
     res.status(400).json({ message: 'User not found' });
+    return;
   }
 
   const result = await user.deleteOne();
