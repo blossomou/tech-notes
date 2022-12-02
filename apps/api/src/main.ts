@@ -10,6 +10,7 @@ import { connectDB } from './database/db';
 import { errorHandler } from './middleware/error-handler';
 import { logEvents, logger } from './middleware/logger';
 import routes from './routes/root';
+import userRoutes from './routes/user-routes';
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
+app.use('/api/users', userRoutes);
 
 app.all('*', (req, res) => {
   res.status(404);

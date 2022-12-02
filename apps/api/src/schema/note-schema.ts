@@ -1,6 +1,8 @@
 import { NoteType } from '@tech-notes/api-interfaces';
-import { Schema } from 'mongoose';
-import * as AutoIncrement from 'mongoose-sequence';
+import mongoose, { Schema } from 'mongoose';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 export interface INoteSchema extends NoteType {
   _id: string;
