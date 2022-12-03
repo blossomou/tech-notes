@@ -9,6 +9,7 @@ import { corsOptions } from './config/cors-options';
 import { connectDB } from './database/db';
 import { errorHandler } from './middleware/error-handler';
 import { logEvents, logger } from './middleware/logger';
+import noteRoutes from './routes/note-routes';
 import routes from './routes/root';
 import userRoutes from './routes/user-routes';
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/api/users', userRoutes);
+app.use('/api/notes', noteRoutes);
 
 app.all('*', (req, res) => {
   res.status(404);
