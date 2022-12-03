@@ -7,7 +7,7 @@ import DashLayout from './components/dash-layout/dash-layout';
 import Layout from './components/layout';
 import Public from './components/public/public';
 import Login from './features/auth/login';
-import Welcome from './features/auth/welcome';
+import Welcome from './features/auth/welcome/welcome';
 import NotesList from './features/notes/notes-list';
 import UsersList from './features/users/users-list';
 

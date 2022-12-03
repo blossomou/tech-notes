@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import styles from './welcome.module.css';
+
 const Welcome = () => {
   const date = new Date();
   const today = new Intl.DateTimeFormat('en-US', {
@@ -9,7 +11,7 @@ const Welcome = () => {
   }).format(date);
 
   const content = (
-    <section className="welcome">
+    <section className={styles['welcome']}>
       <p>{today}</p>
 
       <h1>Welcome!</h1>

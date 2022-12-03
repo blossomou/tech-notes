@@ -1,0 +1,9 @@
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.welcome a::before {
+  content: '➜ ';
+}
