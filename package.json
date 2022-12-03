@@ -9,6 +9,9 @@
   },
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.2.1",
+    "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "core-js": "^3.6.5",
@@ -21,6 +24,7 @@
     "mongoose-sequence": "^5.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-router-dom": "^6.4.4",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.3.0",
     "uuid": "^9.0.0"
@@ -50,6 +54,7 @@
     "@types/node": "16.11.7",
     "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",
+    "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",

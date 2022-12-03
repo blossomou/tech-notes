@@ -1,27 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@tech-notes/api-interfaces';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
+import DashLayout from './components/dash-layout/dash-layout';
+import Layout from './components/layout';
+import Public from './components/public/public';
+import Login from './features/auth/login';
+import Welcome from './features/auth/welcome';
+import NotesList from './features/notes/notes-list';
+import UsersList from './features/users/users-list';
 
-  useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
-      .then(setMessage);
-  }, []);
-
+const App = () => {
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to web!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-          alt="Nx - Smart, Fast and Extensible Build System"
-        />
-      </div>
-      <div>{m.message}</div>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Public />} />
+        <Route path="login" element={<Login />} />
+
+        <Route path="dash" element={<DashLayout />}>
+          <Route index element={<Welcome />} />
+          <Route path="notes">
+            <Route index element={<NotesList />} />
+          </Route>
+
+          <Route path="users">
+            <Route index element={<UsersList />} />
+          </Route>
+        </Route>
+      </Route>
+    </Routes>
   );
 };
 

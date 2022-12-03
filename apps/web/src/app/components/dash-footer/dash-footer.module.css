@@ -1,0 +1,39 @@
+.icon-button {
+  width: 48px;
+  height: 48px;
+  font-size: 2.5rem;
+  background-color: transparent;
+  border: none;
+  color: var(--COLOR);
+  display: grid;
+  place-content: center;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  transform: scale(1.2);
+}
+
+.icon-button[disabled] {
+  visibility: hidden;
+}
+
+.dash-footer {
+  font-size: 1rem;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background-color: var(--BGCOLOR);
+  padding: 0.5em;
+  border-top: 1px solid var(--BORDER-COLOR);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  gap: 1em;
+}
+
+.dash-footer__button {
+  font-size: 1rem;
+  width: auto;
+  height: auto;
+}
